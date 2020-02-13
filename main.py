@@ -1,5 +1,8 @@
 import sys
 from BattleShipAI.src import game
+import random
+
+#arg_2 = int(sys.argv[2])
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:

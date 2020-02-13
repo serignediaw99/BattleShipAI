@@ -1,4 +1,4 @@
-from . import humanplayer
+from .players import humanplayer
 from .firing_location_error import FiringLocationError
 
 

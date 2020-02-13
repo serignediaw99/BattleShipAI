@@ -1,8 +1,8 @@
 from typing import Dict, List
 import copy
-from . import game_config, board, ship, orientation, ship_placement, move, player
-from .firing_location_error import FiringLocationError
-from .player import Player
+from BattleShipAI.src import game_config, board, ship, orientation, ship_placement, move, player
+from BattleShipAI.src.firing_location_error import FiringLocationError
+from BattleShipAI.src.player import Player
 
 
 class HumanPlayer(Player):
@@ -10,17 +10,7 @@ class HumanPlayer(Player):
     ships: Dict[str, ship.Ship]
 
     def __init__(self, player_num: int, config: game_config.GameConfig, other_players: List["Player"]) -> None:
-        super().__init__()
-        self.name = 'No Name'
-        self.init_name(player_num, other_players)
-        self.board = board.Board(config)
-        self.opponents = other_players[:]  # a copy of other players
-        self.ships = copy.deepcopy(config.available_ships)
-        self.place_ships()
-
-        # make this player the opponent of all the other players
-        for opponent in other_players:
-            opponent.add_opponent(self)
+        super().__init__(player_num, config, other_players)
 
     def init_name(self, player_num: int, other_players: List["Player"]) -> None:
         while True:
@@ -69,5 +59,7 @@ class HumanPlayer(Player):
                 print(e)
                 continue
             return firing_location
+
+
 
 

@@ -1,5 +1,6 @@
 import itertools
-from . import game_config, humanplayer
+from . import game_config
+from .players import humanplayer, cheatingai
 
 
 class Game(object):
@@ -11,9 +12,21 @@ class Game(object):
         self.player_turn = 0
         self.setup_players(num_players)
 
+    def get_player_type(self):
+        player_type = input(f"Enter one of ['Human', 'CheatingAi', 'SearchDestroyAi', 'RandomAi']")
+
     def setup_players(self, num_players: int) -> None:
         for player_num in range(1, num_players + 1):
-            self.players.append(humanplayer.HumanPlayer(player_num, self.game_config, self.players))
+            player_type = input(f"Enter one of ['Human', 'CheatingAi', 'SearchDestroyAi', 'RandomAi']")
+            if player_type == 'Human':
+                self.players.append(humanplayer.HumanPlayer(player_num, self.game_config, self.players))
+            elif player_type == 'CheatingAi':
+                self.players.append(cheatingai.CheatingAI(player_num, self.game_config, self.players))
+            elif player_type == 'SearchDestroyAi':
+                self.players.append(searchdestroyai.SearchDestroyAI(player_num, self.game_config, self.players))
+            elif player_type == 'RandomAi':
+                self.players.append(randomai.RandomAI(player_num, self.game_config, self.players))
+
 
     def play(self) -> None:
         active_player = self.players[0]
