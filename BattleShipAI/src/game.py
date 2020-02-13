@@ -1,6 +1,7 @@
 import itertools
 from . import game_config
-from .players import humanplayer, cheatingai
+from .players import humanplayer, cheatingai, searchdestroyai, randomai
+from . import player
 
 
 class Game(object):
@@ -17,14 +18,14 @@ class Game(object):
 
     def setup_players(self, num_players: int) -> None:
         for player_num in range(1, num_players + 1):
-            player_type = input(f"Enter one of ['Human', 'CheatingAi', 'SearchDestroyAi', 'RandomAi']")
-            if player_type == 'Human':
+            player_type = input(f"Enter one of ['Human', 'CheatingAi', 'SearchDestroyAi', 'RandomAi'] for Player {player_num}'s type: ")
+            if 'Human'.lower().startswith(player_type):
                 self.players.append(humanplayer.HumanPlayer(player_num, self.game_config, self.players))
-            elif player_type == 'CheatingAi':
+            elif 'CheatingAi'.lower().startswith(player_type):
                 self.players.append(cheatingai.CheatingAI(player_num, self.game_config, self.players))
-            elif player_type == 'SearchDestroyAi':
+            elif 'SearchDestroyAi'.lower().startswith(player_type):
                 self.players.append(searchdestroyai.SearchDestroyAI(player_num, self.game_config, self.players))
-            elif player_type == 'RandomAi':
+            elif 'RandomAi'.lower().startswith(player_type):
                 self.players.append(randomai.RandomAI(player_num, self.game_config, self.players))
 
 
@@ -36,7 +37,7 @@ class Game(object):
                 break
         print(f'{active_player} won the game!')
 
-    def do_current_players_turn(self, cur_player: humanplayer.HumanPlayer) -> None:
+    def do_current_players_turn(self, cur_player: player.Player) -> None:
         self.display_gamestate(cur_player)
         while True:
             move = cur_player.get_move()
@@ -48,12 +49,12 @@ class Game(object):
     def num_players(self) -> int:
         return len(self.players)
 
-    def get_active_player(self) -> humanplayer.HumanPlayer:
+    def get_active_player(self) -> player.Player:
         return self.players[self.player_turn]
 
     def game_is_over(self) -> bool:
         return any(player_.all_ships_sunk() for player_ in self.players)
 
-    def display_gamestate(self, cur_player: humanplayer.HumanPlayer) -> None:
+    def display_gamestate(self, cur_player: player.Player) -> None:
         cur_player.display_scanning_boards()
         cur_player.display_firing_board()
